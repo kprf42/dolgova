@@ -1,0 +1,96 @@
+syntax = "proto3";
+
+package forum;
+
+option go_package = "proto/forum";
+
+service ForumService {
+    // Posts
+    rpc CreatePost (CreatePostRequest) returns (PostResponse);
+    rpc GetPost (GetPostRequest) returns (PostResponse);
+    rpc GetPosts (GetPostsRequest) returns (GetPostsResponse);
+    
+    // Comments
+    rpc CreateComment (CreateCommentRequest) returns (CommentResponse);
+    rpc GetComments (GetCommentsRequest) returns (GetCommentsResponse);
+    
+    // Chat
+    rpc GetChatMessages (GetChatMessagesRequest) returns (GetChatMessagesResponse);
+}
+
+// ===== Posts =====
+message CreatePostRequest {
+    string title = 1;
+    string content = 2;
+    string category_id = 3;
+    string author_id = 4;
+}
+
+message GetPostRequest {
+    string post_id = 1;
+}
+
+message GetPostsRequest {
+    int32 limit = 1;
+    int32 offset = 2;
+    string category_id = 3; // optional
+}
+
+message PostResponse {
+    string id = 1;
+    string title = 2;
+    string content = 3;
+    string author_id = 4;
+    string category_id = 5;
+    string created_at = 6;
+    bool is_pinned = 7;
+}
+
+message GetPostsResponse {
+    repeated PostResponse posts = 1;
+    int32 total = 2;
+}
+
+// ===== Comments =====
+message CreateCommentRequest {
+    string post_id = 1;
+    string content = 2;
+    string author_id = 3;
+}
+
+message GetCommentsRequest {
+    string post_id = 1;
+    int32 limit = 2;
+    int32 offset = 3;
+}
+
+message CommentResponse {
+    string id = 1;
+    string content = 2;
+    string post_id = 3;
+    string author_id = 4;
+    string created_at = 5;
+}
+
+message GetCommentsResponse {
+    repeated CommentResponse comments = 1;
+    int32 total = 2;
+}
+
+// ===== Chat =====
+message GetChatMessagesRequest {
+    int32 limit = 1;
+    int32 offset = 2;
+}
+
+message ChatMessage {
+    string id = 1;
+    string user_id = 2;
+    string text = 3;
+    string created_at = 4;
+}
+
+message GetChatMessagesResponse {
+    repeated ChatMessage messages = 1;
+    int32 total = 2;
+}

@@ -1,0 +1,53 @@
+syntax = "proto3";
+
+package proto;
+
+option go_package = "github.com/kprf42/dolgova/proto";
+
+// Сервис аутентификации
+service AuthService {
+  // Регистрация нового пользователя
+  rpc Register (RegisterRequest) returns (RegisterResponse);
+  
+  // Вход пользователя
+  rpc Login (LoginRequest) returns (LoginResponse);
+  
+  // Валидация токена
+  rpc ValidateToken (ValidateTokenRequest) returns (ValidateTokenResponse);
+}
+
+// Запрос на регистрацию
+message RegisterRequest {
+  string username = 1;  // Поле 1 - имя пользователя
+  string email = 2;     // Поле 2 - email
+  string password = 3;  // Поле 3 - пароль
+}
+
+// Ответ на регистрацию
+message RegisterResponse {
+  string user_id = 1;  // Поле 1 - ID созданного пользователя
+}
+
+// Запрос на вход
+message LoginRequest {
+  string email = 1;     // Поле 1 - email
+  string password = 2;  // Поле 2 - пароль
+}
+
+// Ответ на вход
+message LoginResponse {
+  string access_token = 1;   // Поле 1 - access токен
+  string refresh_token = 2;  // Поле 2 - refresh токен
+  int64 expires_in = 3;      // Поле 3 - срок действия (timestamp)
+}
+
+// Запрос на валидацию токена
+message ValidateTokenRequest {
+  string token = 1;  // Поле 1 - токен для валидации
+}
+
+// Ответ на валидацию токена
+message ValidateTokenResponse {
+  string user_id = 1;  // Поле 1 - ID пользователя
+  bool valid = 2;      // Поле 2 - валидность токена
+}
